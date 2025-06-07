@@ -1,0 +1,46 @@
+{
+  "total_questions": 328,
+  "answered": {
+    "33": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749310259.726323
+    },
+    "209": {
+      "user_answer": "矩形",
+      "is_correct": true,
+      "timestamp": 1749310274.4722106
+    },
+    "139": {
+      "user_answer": "？",
+      "is_correct": false,
+      "timestamp": 1749310327.6597838
+    },
+    "170": {
+      "user_answer": "团队协作",
+      "is_correct": true,
+      "timestamp": 1749310369.789373
+    },
+    "148": {
+      "user_answer": "宽度",
+      "is_correct": true,
+      "timestamp": 1749310385.593456
+    },
+    "8": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749310390.3454537
+    },
+    "261": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749310402.8505664
+    }
+  },
+  "wrong_questions": [
+    139
+  ],
+  "current_index": 0,
+  "correct_count": 7,
+  "wrong_count": 3
+}

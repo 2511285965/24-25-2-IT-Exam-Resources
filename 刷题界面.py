@@ -536,8 +536,8 @@ class ExamApp:
         # next_btn.pack(pady=10)
 
         # 如果是填空题或简答题，自动聚焦到下一题
-        if self.current_question.get("题型") in ["填空题", "简答题", "解答题"]:
-            result_window.after(2000, lambda: [result_window.destroy(), self.next_question()])
+        #if self.current_question.get("题型") in ["填空题", "简答题", "解答题"]:
+        #    result_window.after(2000, lambda: [result_window.destroy(), self.next_question()])
 
 
     def start_countdown(self, is_correct):

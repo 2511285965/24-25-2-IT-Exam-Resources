@@ -12,9 +12,9 @@
       "timestamp": 1749310274.4722106
     },
     "139": {
-      "user_answer": "？",
+      "user_answer": "访谈？",
       "is_correct": false,
-      "timestamp": 1749310327.6597838
+      "timestamp": 1749310590.3102343
     },
     "170": {
       "user_answer": "团队协作",
@@ -35,12 +35,17 @@
       "user_answer": "A",
       "is_correct": true,
       "timestamp": 1749310402.8505664
+    },
+    "294": {
+      "user_answer": "B",
+      "is_correct": true,
+      "timestamp": 1749310606.673896
     }
   },
   "wrong_questions": [
     139
   ],
   "current_index": 0,
-  "correct_count": 7,
-  "wrong_count": 3
+  "correct_count": 9,
+  "wrong_count": 6
 }

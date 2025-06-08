@@ -1,5 +1,5 @@
 {
-  "total_questions": 107,
+  "total_questions": 106,
   "answered": {
     "77": {
       "user_answer": "与客户或用户沟通，了解他们的需求",
@@ -115,10 +115,68 @@
       "user_answer": "处理逻辑",
       "is_correct": true,
       "timestamp": 1749382727.7484844
+    },
+    "41": {
+      "user_answer": "C++",
+      "is_correct": true,
+      "timestamp": 1749383207.9993377
+    },
+    "49": {
+      "user_answer": "完善性维护",
+      "is_correct": true,
+      "timestamp": 1749383239.3987033
+    },
+    "93": {
+      "user_answer": "D",
+      "is_correct": true,
+      "timestamp": 1749383261.565975
+    },
+    "53": {
+      "user_answer": "面向对象",
+      "is_correct": true,
+      "timestamp": 1749383325.2463613
+    },
+    "96": {
+      "user_answer": "D",
+      "is_correct": true,
+      "timestamp": 1749383332.7839534
+    },
+    "23": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749383339.917996
+    },
+    "46": {
+      "user_answer": "解释",
+      "is_correct": true,
+      "timestamp": 1749383352.499083
+    },
+    "65": {
+      "user_answer": "可维护性",
+      "is_correct": true,
+      "timestamp": 1749383379.623407
+    },
+    "61": {
+      "user_answer": "",
+      "is_correct": false,
+      "timestamp": 1749383454.8002846
+    },
+    "0": {
+      "user_answer": "正确",
+      "is_correct": true,
+      "timestamp": 1749383486.7824965
+    },
+    "63": {
+      "user_answer": "正确",
+      "is_correct": false,
+      "timestamp": 1749383501.0221941
     }
   },
-  "wrong_questions": [],
+  "wrong_questions": [
+    61,
+    63
+  ],
   "current_index": 0,
-  "correct_count": 25,
-  "wrong_count": 11
+  "correct_count": 35,
+  "wrong_count": 25
 }

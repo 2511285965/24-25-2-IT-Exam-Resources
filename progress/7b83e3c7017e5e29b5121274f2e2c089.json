@@ -170,13 +170,44 @@
       "user_answer": "正确",
       "is_correct": false,
       "timestamp": 1749383501.0221941
+    },
+    "101": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749383615.3713226
+    },
+    "74": {
+      "user_answer": "怎么做",
+      "is_correct": true,
+      "timestamp": 1749383628.7975087
+    },
+    "85": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749383633.0598042
+    },
+    "99": {
+      "user_answer": "C",
+      "is_correct": true,
+      "timestamp": 1749384189.7876832
+    },
+    "21": {
+      "user_answer": "B",
+      "is_correct": true,
+      "timestamp": 1749384207.5266623
+    },
+    "64": {
+      "user_answer": "可维护性",
+      "is_correct": false,
+      "timestamp": 1749384222.793138
     }
   },
   "wrong_questions": [
     61,
-    63
+    63,
+    64
   ],
   "current_index": 0,
-  "correct_count": 35,
-  "wrong_count": 25
+  "correct_count": 43,
+  "wrong_count": 28
 }

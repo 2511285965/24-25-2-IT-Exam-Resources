@@ -1,0 +1,124 @@
+{
+  "total_questions": 107,
+  "answered": {
+    "77": {
+      "user_answer": "与客户或用户沟通，了解他们的需求",
+      "is_correct": true,
+      "timestamp": 1749375305.5959415
+    },
+    "90": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749375346.3793545
+    },
+    "82": {
+      "user_answer": "B",
+      "is_correct": true,
+      "timestamp": 1749381886.4152465
+    },
+    "75": {
+      "user_answer": "需求规格说明书",
+      "is_correct": true,
+      "timestamp": 1749381908.7089355
+    },
+    "52": {
+      "user_answer": "判断",
+      "is_correct": true,
+      "timestamp": 1749381918.5054178
+    },
+    "35": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749381925.1705031
+    },
+    "87": {
+      "user_answer": "D",
+      "is_correct": true,
+      "timestamp": 1749381935.9793375
+    },
+    "105": {
+      "user_answer": "C",
+      "is_correct": true,
+      "timestamp": 1749381949.0176508
+    },
+    "19": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749381958.7590563
+    },
+    "102": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749381963.9094775
+    },
+    "39": {
+      "user_answer": "代码",
+      "is_correct": true,
+      "timestamp": 1749381973.1962802
+    },
+    "50": {
+      "user_answer": "菱形框",
+      "is_correct": true,
+      "timestamp": 1749381985.8309834
+    },
+    "7": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749382315.8780863
+    },
+    "24": {
+      "user_answer": "B",
+      "is_correct": true,
+      "timestamp": 1749382321.6839712
+    },
+    "103": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749382332.623344
+    },
+    "43": {
+      "user_answer": "功能",
+      "is_correct": true,
+      "timestamp": 1749382405.5374851
+    },
+    "25": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749382416.7682333
+    },
+    "5": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749382422.2106526
+    },
+    "60": {
+      "user_answer": "忽视个体差异的重要性",
+      "is_correct": true,
+      "timestamp": 1749382443.872515
+    },
+    "84": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749382449.7414012
+    },
+    "27": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749382716.6622515
+    },
+    "92": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749382720.6166725
+    },
+    "47": {
+      "user_answer": "处理逻辑",
+      "is_correct": true,
+      "timestamp": 1749382727.7484844
+    }
+  },
+  "wrong_questions": [],
+  "current_index": 0,
+  "correct_count": 25,
+  "wrong_count": 11
+}

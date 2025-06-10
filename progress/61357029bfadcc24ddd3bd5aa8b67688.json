@@ -1,0 +1,41 @@
+{
+  "total_questions": 17,
+  "answered": {
+    "1": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749443485.4348133
+    },
+    "0": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749443496.453163
+    },
+    "13": {
+      "user_answer": "C",
+      "is_correct": true,
+      "timestamp": 1749443501.0665839
+    },
+    "3": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749443502.574954
+    },
+    "2": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1749443504.3392549
+    },
+    "9": {
+      "user_answer": "。",
+      "is_correct": false,
+      "timestamp": 1749443510.8774881
+    }
+  },
+  "wrong_questions": [
+    9
+  ],
+  "current_index": 0,
+  "correct_count": 5,
+  "wrong_count": 2
+}

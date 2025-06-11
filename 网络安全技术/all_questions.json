@@ -1,0 +1,222 @@
+[
+  {
+    "type": "简答题",
+    "question": "VPN有哪两大类型，分别适应哪些场合。",
+    "answer": "两大类型：1. 远程访问VPN：适应员工远程办公，如家庭访问公司网络。2. 站点到站点VPN：适应企业分支互联，如连接不同办公地点。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 1,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "简述ARP欺骗攻击，以及常见的ARP欺骗的工作原理。",
+    "answer": "ARP欺骗攻击是一种网络攻击方式，攻击者通过伪造ARP（地址解析协议）响应包，欺骗局域网内的其他设备，使其误认为攻击者的MAC地址对应的是目标IP地址。这样，原本应该发送到目标设备的网络流量就会被错误地发送到攻击者那里，从而实现流量的劫持或监听。常见的ARP欺骗的工作原理包括：攻击者持续向局域网内的设备发送伪造的ARP响应包，声称自己的MAC地址对应的是网关或其他重要设备的IP地址。由于ARP协议本身没有安全验证机制，局域网内的设备会更新自己的ARP缓存表，将错误的MAC地址与IP地址对应关系保存下来。这样，当这些设备尝试与网关或其他设备通信时，数据包就会被发送到攻击者的机器上，攻击者可以截获、篡改或阻断这些数据包。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 2,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "简述网络安全常用关键技术的内容？",
+    "answer": "常用技术：防火墙（访问控制）、入侵检测系统（威胁监控）、加密（数据保护）、认证（身份验证）、访问控制（权限管理）、VPN（安全连接）。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 3,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "什么是消息认证？哈希函数在消息认证的实现上有何特点？",
+    "answer": "消息认证：验证消息完整性和来源真实性。哈希函数特点：输出固定长度摘要，易计算，抗篡改，用于生成消息认证码（如HMAC）。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 4,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "什么是脚本？常用的脚本软件有哪些？",
+    "answer": "脚本：自动化执行的命令序列文件。常用软件：Python、JavaScript、Bash、PowerShell。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 5,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "填空题",
+    "question": "如何使用防火墙规则做到只允许外面的用户访问服务器的web服务？",
+    "answer": "设置防火墙规则：允许入站流量到服务器80端口（HTTP）和443端口（HTTPS），拒绝所有其他入站流量。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 6,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "IKE的作用是什么？SA的作用是什么？",
+    "answer": "IKE作用：在IPsec中安全协商和交换密钥。SA作用：定义安全通信参数，如加密算法和密钥。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 7,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "简述一下在一台初始化配置的防火墙上配置安全策略的步骤？",
+    "answer": "步骤：1. 登录管理界面。2. 定义网络对象（IP/端口）。3. 创建安全策略（允许/拒绝规则）。4. 应用策略到接口。5. 保存并测试配置。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 8,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "什么是信息安全等级保护？为什么实施信息安全等级保护？信息安全等级保护2.0和1.0之间的区别是什么？",
+    "answer": "信息安全等级保护是指根据信息系统在国家安全、经济建设、社会生活中的重要程度，以及信息系统遭到破坏后对国家安全、社会秩序、公共利益以及公民、法人和其他组织的合法权益的危害程度，对信息系统实行分等级保护的一种制度。实施信息安全等级保护的原因包括：保障信息系统安全、满足法律法规和标准的要求、进行风险管理。信息安全等级保护2.0与1.0的主要区别在于：2.0版本扩展了保护对象的范围（如云计算、物联网等新兴技术领域），强调了主动防御和动态防御的理念，而1.0版本则为基础框架。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 9,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "代理防火墙的特点？",
+    "answer": "特点：工作在应用层，代理流量，提供深度包检测，隐藏内部IP，但可能增加延迟。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 10,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "什么是身份认证？用哪些方法可以实现？",
+    "answer": "身份认证是验证用户或系统身份的过程。实现方法包括：密码、生物识别（如指纹）、令牌、多因素认证等。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 11,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "填空题",
+    "question": "WindowsNT的注册表有几个根键？各存储哪些方面的信息？",
+    "answer": "五个根键：HKEY_CLASSES_ROOT（文件关联）、HKEY_CURRENT_USER（当前用户设置）、HKEY_LOCAL_MACHINE（系统硬件/软件设置）、HKEY_USERS（所有用户配置）、HKEY_CURRENT_CONFIG（当前硬件配置）。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 12,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "填空题",
+    "question": "综合安全服务模型的构成？",
+    "answer": "认证、访问控制、数据机密性、数据完整性、可用性、不可否认性",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 13,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "RSA的工作原理？",
+    "answer": "RSA的工作原理基于公钥和私钥对。公钥用于加密数据，私钥用于解密；私钥用于签名，公钥用于验证签名。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 14,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "嗅探器的工作原理？",
+    "answer": "工作原理：将网卡设置为混杂模式，捕获所有传入的网络数据包进行分析。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 15,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "结合 ARP 协议的工作特点，描述 ARP 欺骗的工作原理。",
+    "answer": "基于ARP广播查询响应特点，ARP欺骗：攻击者发送伪造ARP响应，将目标IP映射到攻击者MAC，重定向流量。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 16,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "结合目前的网络的应用，简述为什么要研究网络安全。",
+    "answer": "研究网络安全的原因包括：防止网络攻击（如勒索软件）、保护数据隐私、确保服务可用性、满足法规要求。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 17,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "散列算法有何特点？",
+    "answer": "特点：输出固定长度摘要、输入敏感（雪崩效应）、抗碰撞、不可逆、计算高效。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 18,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "什么是身份认证？分析身份认证中3种不同方式的特点。",
+    "answer": "身份认证是验证用户身份的过程。三种不同方式的特点如下：1. 基于知识的认证（如密码）：易于使用但安全性较低。2. 基于所有物的认证（如安全令牌）：安全性较强但存在丢失风险。3. 基于生物特征的认证（如指纹）：安全性高但实施成本较高。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 19,
+    "validation_error": "",
+    "is_valid": true
+  },
+  {
+    "type": "简答题",
+    "question": "与蠕虫和脚本病毒相比，木马有哪些具体的特点？",
+    "answer": "木马特点：不自我复制，伪装合法软件，开后门远程控制，窃取数据；蠕虫自动传播，脚本病毒依赖脚本文件。",
+    "options": [],
+    "source_image": "None",
+    "source_subject": "智能信息检索",
+    "original_index": 20,
+    "validation_error": "",
+    "is_valid": true
+  }
+]

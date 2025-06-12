@@ -17,6 +17,7 @@ import threading
 ROOT_DIR = "./"  # 题库根目录
 PROGRESS_DIR = "progress"  # 进度保存目录
 
+
 def install_package(package):
     """安装必要的Python包"""
     try:
@@ -25,6 +26,7 @@ def install_package(package):
         print(f"正在安装 {package}...")
         subprocess.check_call([sys.executable, "-m", "pip", "install", package])
         print(f"{package} 安装完成!")
+
 
 def scan_subjects():
     """扫描题库目录，返回包含xlsx文件的科目列表"""
@@ -45,6 +47,7 @@ def scan_subjects():
                 subjects.append(entry)
     return subjects
 
+
 def scan_question_files(subject):
     """扫描指定科目下的题库文件"""
     subject_dir = os.path.join(ROOT_DIR, subject)
@@ -57,6 +60,7 @@ def scan_question_files(subject):
                 question_files.append(full_path)
 
     return question_files
+
 
 def parse_question_file(file_path):
     """解析题库文件，返回题目列表"""
@@ -147,9 +151,11 @@ def parse_question_file(file_path):
 
     return questions
 
+
+## 问题所在
 def normalize_answer(answer):
     """标准化答案格式"""
-    if isinstance(answer, str):
+    if not isinstance(answer, str):
         answer = answer.strip()
         # 处理判断题
         if "正确" in answer or "对" in answer or "是" in answer or "T" in answer or "t" in answer:
@@ -158,6 +164,7 @@ def normalize_answer(answer):
             return "错误"
     return answer
 
+
 def get_progress_file_path(question_file):
     """获取进度文件路径"""
     if not os.path.exists(PROGRESS_DIR):
@@ -165,6 +172,7 @@ def get_progress_file_path(question_file):
 
     file_hash = hashlib.md5(question_file.encode()).hexdigest()
     return os.path.join(PROGRESS_DIR, f"{file_hash}.json")
+
 
 def load_progress(question_file):
     """加载进度信息"""
@@ -186,11 +194,13 @@ def load_progress(question_file):
         "wrong_count": 0
     }
 
+
 def save_progress(question_file, progress):
     """保存进度信息"""
     progress_file = get_progress_file_path(question_file)
     with open(progress_file, "w", encoding="utf-8") as f:
         json.dump(progress, f, ensure_ascii=False, indent=2)
+
 
 def check_answer(question, user_answer):
     """检查答案是否正确"""
@@ -227,7 +237,8 @@ def check_answer(question, user_answer):
     # 多选题检查
     if question.get("题型") == "多选题":
         # 用户答案格式为 "A | B | C"
-        user_parts = [part.strip().upper() for part in user_answer.split("|")] if "|" in user_answer else [user_answer.strip().upper()]
+        user_parts = [part.strip().upper() for part in user_answer.split("|")] if "|" in user_answer else [
+            user_answer.strip().upper()]
         correct_parts = [part.strip().upper() for part in question.get("answer_parts", [])]
 
         # 比较答案（顺序无关）
@@ -260,6 +271,7 @@ def check_answer(question, user_answer):
     # 其他题型直接比较
     return user_answer == correct_answer, correct_answer
 
+
 class ExamApp:
     def __init__(self, root):
         self.root = root
@@ -277,11 +289,11 @@ class ExamApp:
         self.selected_subject = ""
         self.selected_file = ""
         self.default_wait_seconds = 5  # 默认等待时间（秒）
-        self.showing_answer = False     # 是否正在显示答案
-        self.review_mode = False        # 背题模式标志
-        self.filter_types = ["全部"]    # 题型筛选选项
-        self.selected_filter = "全部"   # 当前选中的题型筛选
-        self.filter_menu_open = False   # 筛选菜单是否打开
+        self.showing_answer = False  # 是否正在显示答案
+        self.review_mode = False  # 背题模式标志
+        self.filter_types = ["全部"]  # 题型筛选选项
+        self.selected_filter = "全部"  # 当前选中的题型筛选
+        self.filter_menu_open = False  # 筛选菜单是否打开
 
         # 创建主框架
         self.create_welcome_frame()
@@ -289,14 +301,41 @@ class ExamApp:
         # 确保安装所需包
         threading.Thread(target=self.install_required_packages, daemon=True).start()
 
-        self.result_label = None      # 结果标签
-        self.countdown_label = None   # 倒计时标签
-        self.countdown_id = None      # 倒计时任务ID
-        self.countdown_seconds = 5    # 倒计时秒数
-        self.wait_time_label = None   # 等待时间显示标签
+        self.result_label = None  # 结果标签
+        self.countdown_label = None  # 倒计时标签
+        self.countdown_id = None  # 倒计时任务ID
+        self.countdown_seconds = 5  # 倒计时秒数
+        self.wait_time_label = None  # 等待时间显示标签
 
         self.multi_select_vars = {}  # 存储多选题选项状态
         self.multi_select_frame = None  # 多选题选项框架
+
+        self.root.bind("<Control-Left>", self.handle_prev_shortcut)
+        self.root.bind("<Control-Right>", self.handle_next_shortcut)
+
+    def handle_prev_shortcut(self, event):
+        """处理Control+左箭头快捷键 - 上一题"""
+        # 只有在答题界面才响应快捷键
+        if hasattr(self, 'current_question') and self.current_question is not None:
+            if self.current_index > 0:
+                self.prev_question()
+            else:
+                # 已经是第一题时的提示
+                self.result_label.config(text="已经是第一题", fg="orange")
+                # 显示提示后1.5秒清除
+                self.root.after(1500, lambda: self.result_label.config(text=""))
+
+    def handle_next_shortcut(self, event):
+        """处理Control+右箭头快捷键 - 下一题"""
+        # 只有在答题界面才响应快捷键
+        if hasattr(self, 'current_question') and self.current_question is not None:
+            if self.current_index < len(self.question_order) - 1:
+                self.next_question()
+            else:
+                # 已经是最后一题时的提示
+                self.result_label.config(text="已经是最后一题", fg="orange")
+                # 显示提示后1.5秒清除
+                self.root.after(1500, lambda: self.result_label.config(text=""))
 
     def install_required_packages(self):
         install_package("openpyxl")
@@ -352,7 +391,8 @@ class ExamApp:
         self.subjects = scan_subjects()
 
         if not self.subjects:
-            no_subject_label = tk.Label(self.root, text="未找到任何包含题目的科目!", font=("微软雅黑", 12), bg="#f0f0f0", fg="red")
+            no_subject_label = tk.Label(self.root, text="未找到任何包含题目的科目!", font=("微软雅黑", 12),
+                                        bg="#f0f0f0", fg="red")
             no_subject_label.pack(pady=20)
 
             back_btn = tk.Button(self.root, text="返回", command=self.create_welcome_frame,
@@ -527,7 +567,7 @@ class ExamApp:
         review_btn.pack(side=tk.RIGHT, padx=5)
 
         # 题目编号
-        tk.Label(info_frame, text=f"题目 {self.current_index+1}/{len(self.question_order)}",
+        tk.Label(info_frame, text=f"题目 {self.current_index + 1}/{len(self.question_order)}",
                  font=("微软雅黑", 12), bg="#f0f0f0").pack(side=tk.LEFT)
 
         # 问题内容
@@ -544,7 +584,8 @@ class ExamApp:
         # 背题模式下直接显示答案
         if self.review_mode:
 
-            if self.current_question.get("题型") in ["选择题", "判断题", "多选题"] and self.current_question.get("options"):
+            if self.current_question.get("题型") in ["选择题", "判断题", "多选题"] and self.current_question.get(
+                    "options"):
                 options_frame = tk.LabelFrame(main_frame, text="选项与答案",
                                               font=("微软雅黑", 12, "bold"),
                                               bg="#f0f0f0", padx=10, pady=10)
@@ -617,7 +658,7 @@ class ExamApp:
                 # print()
                 # print(" ")
                 # print(correct_answer)
-                answer_text.insert(tk.INSERT, self.current_question.get("答案","???"))
+                answer_text.insert(tk.INSERT, self.current_question.get("答案", "???"))
                 answer_text.config(state=tk.DISABLED)
                 answer_text.pack(fill=tk.BOTH, expand=True)
 
@@ -750,7 +791,8 @@ class ExamApp:
                           font=("微软雅黑", 12), bg="#4CAF50", fg="white").pack(side=tk.LEFT, padx=5)
 
                 tk.Button(self.manual_check_frame, text="提交并标记错误",
-                          command=lambda: self.manual_check_answer(False), font=("微软雅黑", 12), bg="#F44336", fg="white").pack(side=tk.LEFT, padx=5)
+                          command=lambda: self.manual_check_answer(False), font=("微软雅黑", 12), bg="#F44336",
+                          fg="white").pack(side=tk.LEFT, padx=5)
             else:
                 # 答案输入（非选择题）
                 if not options:
@@ -1024,11 +1066,22 @@ class ExamApp:
         stats_frame = tk.Frame(main_frame, bg="#f0f0f0")
         stats_frame.pack(pady=20)
 
-        tk.Label(stats_frame, text=f"总答题数: {total_answered}", font=("微软雅黑", 14), bg="#f0f0f0").grid(row=0, column=0, sticky="w", pady=5)
-        tk.Label(stats_frame, text=f"正确: {correct_count}", font=("微软雅黑", 14), fg="green", bg="#f0f0f0").grid(row=1, column=0, sticky="w", pady=5)
-        tk.Label(stats_frame, text=f"错误: {wrong_count}", font=("微软雅黑", 14), fg="red", bg="#f0f0f0").grid(row=2, column=0, sticky="w", pady=5)
-        tk.Label(stats_frame, text=f"准确率: {accuracy:.2f}%", font=("微软雅黑", 14), bg="#f0f0f0").grid(row=3, column=0, sticky="w", pady=5)
-        tk.Label(stats_frame, text=f"剩余错题: {len(self.progress['wrong_questions'])}", font=("微软雅黑", 14), bg="#f0f0f0").grid(row=4, column=0, sticky="w", pady=5)
+        tk.Label(stats_frame, text=f"总答题数: {total_answered}", font=("微软雅黑", 14), bg="#f0f0f0").grid(row=0,
+                                                                                                            column=0,
+                                                                                                            sticky="w",
+                                                                                                            pady=5)
+        tk.Label(stats_frame, text=f"正确: {correct_count}", font=("微软雅黑", 14), fg="green", bg="#f0f0f0").grid(
+            row=1, column=0, sticky="w", pady=5)
+        tk.Label(stats_frame, text=f"错误: {wrong_count}", font=("微软雅黑", 14), fg="red", bg="#f0f0f0").grid(row=2,
+                                                                                                               column=0,
+                                                                                                               sticky="w",
+                                                                                                               pady=5)
+        tk.Label(stats_frame, text=f"准确率: {accuracy:.2f}%", font=("微软雅黑", 14), bg="#f0f0f0").grid(row=3,
+                                                                                                         column=0,
+                                                                                                         sticky="w",
+                                                                                                         pady=5)
+        tk.Label(stats_frame, text=f"剩余错题: {len(self.progress['wrong_questions'])}", font=("微软雅黑", 14),
+                 bg="#f0f0f0").grid(row=4, column=0, sticky="w", pady=5)
 
         # 按钮框架
         btn_frame = tk.Frame(main_frame, bg="#f0f0f0")

@@ -613,9 +613,11 @@ class ExamApp:
 
                 answer_text = scrolledtext.ScrolledText(answer_frame, font=("微软雅黑", 12),
                                                         wrap=tk.WORD, height=4)
-                correct_answer = normalize_answer(self.current_question.get("答案", ""))
-
-                answer_text.insert(tk.INSERT, correct_answer)
+                # correct_answer = normalize_answer(self.current_question.get("答案", ""))
+                # print()
+                # print(" ")
+                # print(correct_answer)
+                answer_text.insert(tk.INSERT, self.current_question.get("答案","???"))
                 answer_text.config(state=tk.DISABLED)
                 answer_text.pack(fill=tk.BOTH, expand=True)
 

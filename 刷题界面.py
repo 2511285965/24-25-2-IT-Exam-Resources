@@ -221,7 +221,6 @@ def check_answer(question, user_answer):
             user_option_text = user_answer
         if correct_option_text is None:
             correct_option_text = correct_answer
-        print(user_option_text.strip(), correct_option_text.strip())
         # 使用转换后的文本进行比较
         return user_option_text.strip() == correct_option_text.strip(), correct_option_text.strip()
 
@@ -259,7 +258,6 @@ def check_answer(question, user_answer):
         return True, correct_answer
 
     # 其他题型直接比较
-    print(user_answer, correct_answer)
     return user_answer == correct_answer, correct_answer
 
 class ExamApp:
@@ -280,6 +278,10 @@ class ExamApp:
         self.selected_file = ""
         self.default_wait_seconds = 5  # 默认等待时间（秒）
         self.showing_answer = False     # 是否正在显示答案
+        self.review_mode = False        # 背题模式标志
+        self.filter_types = ["全部"]    # 题型筛选选项
+        self.selected_filter = "全部"   # 当前选中的题型筛选
+        self.filter_menu_open = False   # 筛选菜单是否打开
 
         # 创建主框架
         self.create_welcome_frame()
@@ -421,7 +423,26 @@ class ExamApp:
         self.progress = load_progress(file_path)
         self.progress["total_questions"] = len(self.questions)
 
-        # 准备题目顺序（优先错题）
+        # 提取所有题型
+        all_types = set()
+        for q in self.questions:
+            q_type = q.get("题型", "未知题型")
+            if q_type:
+                all_types.add(q_type)
+
+        # 更新题型筛选选项
+        self.filter_types = ["全部"] + sorted(list(all_types))
+        self.selected_filter = "全部"
+
+        # 准备题目顺序
+        self.generate_question_order()
+
+        self.current_index = 0
+        self.show_question()
+
+    def generate_question_order(self):
+        """生成题目顺序（考虑题型筛选）"""
+        # 优先错题
         self.question_order = self.progress["wrong_questions"][:]
 
         # 添加未做过的题目
@@ -437,8 +458,14 @@ class ExamApp:
             self.question_order = list(range(len(self.questions)))
             random.shuffle(self.question_order)
 
-        self.current_index = 0
-        self.show_question()
+        # 应用题型筛选
+        if self.selected_filter != "全部":
+            filtered_order = []
+            for idx in self.question_order:
+                q_type = self.questions[idx].get("题型", "未知题型")
+                if q_type == self.selected_filter:
+                    filtered_order.append(idx)
+            self.question_order = filtered_order
 
     def show_question(self):
         """显示当前题目"""
@@ -464,11 +491,44 @@ class ExamApp:
         info_frame = tk.Frame(main_frame, bg="#f0f0f0")
         info_frame.pack(fill=tk.X, pady=5)
 
+        # 题型显示和筛选按钮
+        type_frame = tk.Frame(info_frame, bg="#f0f0f0")
+        type_frame.pack(side=tk.RIGHT, padx=10)
+
+        # 题型筛选菜单
+        filter_btn = tk.Menubutton(type_frame, text="题型筛选 ▼",
+                                   font=("微软雅黑", 10), bg="#E0E0E0",
+                                   relief=tk.RAISED, padx=5, pady=2)
+        filter_btn.menu = tk.Menu(filter_btn, tearoff=0)
+        filter_btn["menu"] = filter_btn.menu
+
+        # 添加筛选选项
+        for t in self.filter_types:
+            filter_btn.menu.add_radiobutton(
+                label=t,
+                command=lambda t=t: self.apply_type_filter(t),
+                variable=tk.StringVar(value=self.selected_filter)
+            )
+
+        filter_btn.pack(side=tk.RIGHT, padx=5)
+
+        # 当前题型显示
+        q_type = self.current_question.get("题型", "未知题型")
+        type_label = tk.Label(type_frame, text=f"题型: {q_type}",
+                              font=("微软雅黑", 12), bg="#f0f0f0")
+        type_label.pack(side=tk.RIGHT, padx=5)
+
+        # 背题模式切换按钮
+        review_btn = tk.Button(type_frame, text="背题模式" if not self.review_mode else "练习模式",
+                               font=("微软雅黑", 10),
+                               bg="#9C27B0" if self.review_mode else "#E0E0E0",
+                               fg="white" if self.review_mode else "black",
+                               command=self.toggle_review_mode)
+        review_btn.pack(side=tk.RIGHT, padx=5)
+
+        # 题目编号
         tk.Label(info_frame, text=f"题目 {self.current_index+1}/{len(self.question_order)}",
                  font=("微软雅黑", 12), bg="#f0f0f0").pack(side=tk.LEFT)
-
-        tk.Label(info_frame, text=f"题型: {self.current_question.get('题型', '未知题型')}",
-                 font=("微软雅黑", 12), bg="#f0f0f0").pack(side=tk.RIGHT)
 
         # 问题内容
         question_frame = tk.LabelFrame(main_frame, text="问题", font=("微软雅黑", 12, "bold"),
@@ -481,6 +541,110 @@ class ExamApp:
         question_text.config(state=tk.DISABLED)
         question_text.pack(fill=tk.BOTH, expand=True)
 
+        # 背题模式下直接显示答案
+        if self.review_mode:
+
+            if self.current_question.get("题型") in ["选择题", "判断题", "多选题"] and self.current_question.get("options"):
+                options_frame = tk.LabelFrame(main_frame, text="选项与答案",
+                                              font=("微软雅黑", 12, "bold"),
+                                              bg="#f0f0f0", padx=10, pady=10)
+                options_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+
+                # 获取正确答案
+                correct_answer = normalize_answer(self.current_question.get("答案", ""))
+                q_type = self.current_question.get("题型", "")
+                raw_options = self.current_question.get("raw_options", [])
+                letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
+
+                # 确定正确选项（支持多选题）
+                correct_answers = []
+                if q_type == "多选题":
+                    # 处理多选题答案格式（可能包含多个选项）
+                    if "|" in correct_answer:
+                        correct_parts = [part.strip() for part in correct_answer.split("|")]
+                    else:
+                        correct_parts = [correct_answer.strip()]
+
+                    # 将答案转换为选项字母
+                    for part in correct_parts:
+                        if part in letters:  # 如果答案已经是字母
+                            correct_answers.append(part)
+                        else:  # 如果答案是文本，查找对应的选项
+                            for idx, opt in enumerate(raw_options):
+                                if opt.strip() == part.strip() and idx < len(letters):
+                                    correct_answers.append(letters[idx])
+                else:
+                    # 单选题和判断题处理
+                    if correct_answer in letters:  # 如果答案已经是字母
+                        correct_answers = [correct_answer]
+                    else:  # 如果答案是文本，查找对应的选项
+                        for idx, opt in enumerate(raw_options):
+                            if opt.strip() == correct_answer.strip() and idx < len(letters):
+                                correct_answers = [letters[idx]]
+
+                # 显示所有选项，正确选项用绿色标记
+                for i, option_text in enumerate(raw_options):
+                    if i >= len(letters):
+                        break
+
+                    letter = letters[i]
+                    # 创建选项框架
+                    option_frame = tk.Frame(options_frame, bg="#f0f0f0")
+                    option_frame.pack(fill=tk.X, pady=2)
+
+                    # 选项标签
+                    label_text = f"{letter}. {option_text}"
+                    label = tk.Label(option_frame, text=label_text,
+                                     font=("微软雅黑", 11),
+                                     bg="#f0f0f0",
+                                     anchor="w")
+
+                    # 如果是正确选项，使用绿色标记
+                    if letter in correct_answers:
+                        label.config(fg="green", font=("微软雅黑", 11, "bold"))
+
+                    label.pack(side=tk.LEFT, fill=tk.X, expand=True)
+
+            else:
+                answer_frame = tk.LabelFrame(main_frame, text="标准答案",
+                                             font=("微软雅黑", 12, "bold"),
+                                             bg="#f0f0f0", padx=10, pady=10)
+                answer_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+
+                answer_text = scrolledtext.ScrolledText(answer_frame, font=("微软雅黑", 12),
+                                                        wrap=tk.WORD, height=4)
+                correct_answer = normalize_answer(self.current_question.get("答案", ""))
+
+                answer_text.insert(tk.INSERT, correct_answer)
+                answer_text.config(state=tk.DISABLED)
+                answer_text.pack(fill=tk.BOTH, expand=True)
+
+        '''# 背题模式下直接显示答案
+        if self.review_mode:
+            answer_frame = tk.LabelFrame(main_frame, text="标准答案",
+                                         font=("微软雅黑", 12, "bold"),
+                                         bg="#f0f0f0", padx=10, pady=10)
+            answer_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+
+            answer_text = scrolledtext.ScrolledText(answer_frame, font=("微软雅黑", 12),
+                                                    wrap=tk.WORD, height=4)
+            correct_answer = normalize_answer(self.current_question.get("答案", ""))
+
+            # 选择题处理：显示选项字母
+            if self.current_question.get("题型") in ["选择题", "判断题", "多选题"] and self.current_question.get("options"):
+                letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
+                options = self.current_question.get("raw_options", [])
+
+                for i, opt in enumerate(options):
+                    if opt.strip() == correct_answer.strip() and i < len(letters):
+                        correct_answer = f"{letters[i]}. {opt}"
+                        break
+
+            answer_text.insert(tk.INSERT, correct_answer)
+            answer_text.config(state=tk.DISABLED)
+            answer_text.pack(fill=tk.BOTH, expand=True)'''
+
+        # 显示图片
         if "image_path" in self.current_question and self.current_question["image_path"]:
             try:
                 image_path = self.current_question["image_path"]
@@ -518,87 +682,89 @@ class ExamApp:
                                        font=("微软雅黑", 10), fg="red", bg="#f0f0f0")
                 error_label.pack(padx=10, pady=5)
 
-        # 选项（选择题）
-        options = self.current_question.get("options", [])
-        if options and self.current_question.get("题型") != "多选题":
-            # 非多选题使用按钮
-            options_frame = tk.LabelFrame(main_frame, text="选项", font=("微软雅黑", 12, "bold"),
-                                          bg="#f0f0f0", padx=10, pady=10)
-            options_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+        # 非背题模式显示答题区域
+        if not self.review_mode:
+            # 选项（选择题）
+            options = self.current_question.get("options", [])
+            if options and self.current_question.get("题型") != "多选题":
+                # 非多选题使用按钮
+                options_frame = tk.LabelFrame(main_frame, text="选项", font=("微软雅黑", 12, "bold"),
+                                              bg="#f0f0f0", padx=10, pady=10)
+                options_frame.pack(fill=tk.BOTH, expand=True, pady=10)
 
-            letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
-            for i, opt in enumerate(options):
-                if i < len(letters):
-                    btn = tk.Button(options_frame, text=f"{letters[i]}. {opt}",
-                                    command=lambda l=letters[i]: self.check_answer_wrapper(l),
-                                    font=("微软雅黑", 11), bg="#E0E0E0", width=40, anchor="w")
-                    btn.pack(pady=5, padx=10, anchor="w")
+                letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
+                for i, opt in enumerate(options):
+                    if i < len(letters):
+                        btn = tk.Button(options_frame, text=f"{letters[i]}. {opt}",
+                                        command=lambda l=letters[i]: self.check_answer_wrapper(l),
+                                        font=("微软雅黑", 11), bg="#E0E0E0", width=40, anchor="w")
+                        btn.pack(pady=5, padx=10, anchor="w")
 
-        elif options and self.current_question.get("题型") == "多选题":
-            # 多选题使用复选框
-            self.multi_select_vars = {}  # 重置选项状态
+            elif options and self.current_question.get("题型") == "多选题":
+                # 多选题使用复选框
+                self.multi_select_vars = {}  # 重置选项状态
 
-            options_frame = tk.LabelFrame(main_frame, text="选项（可多选）",
-                                          font=("微软雅黑", 12, "bold"),
-                                          bg="#f0f0f0", padx=10, pady=10)
-            options_frame.pack(fill=tk.BOTH, expand=True, pady=10)
-            self.multi_select_frame = options_frame  # 保存引用
+                options_frame = tk.LabelFrame(main_frame, text="选项（可多选）",
+                                              font=("微软雅黑", 12, "bold"),
+                                              bg="#f0f0f0", padx=10, pady=10)
+                options_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+                self.multi_select_frame = options_frame  # 保存引用
 
-            letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
-            for i, opt in enumerate(options):
-                if i < len(letters):
-                    var = tk.BooleanVar()
-                    self.multi_select_vars[letters[i]] = var
+                letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
+                for i, opt in enumerate(options):
+                    if i < len(letters):
+                        var = tk.BooleanVar()
+                        self.multi_select_vars[letters[i]] = var
 
-                    cb = tk.Checkbutton(options_frame, text=f"{letters[i]}. {opt}",
-                                        variable=var, font=("微软雅黑", 11),
-                                        bg="#f0f0f0", anchor="w")
-                    cb.pack(fill=tk.X, pady=3, padx=10)
+                        cb = tk.Checkbutton(options_frame, text=f"{letters[i]}. {opt}",
+                                            variable=var, font=("微软雅黑", 11),
+                                            bg="#f0f0f0", anchor="w")
+                        cb.pack(fill=tk.X, pady=3, padx=10)
 
-            # 添加多选题提交按钮
-            multi_submit_frame = tk.Frame(main_frame, bg="#f0f0f0")
-            multi_submit_frame.pack(pady=5)
+                # 添加多选题提交按钮
+                multi_submit_frame = tk.Frame(main_frame, bg="#f0f0f0")
+                multi_submit_frame.pack(pady=5)
 
-            submit_btn = tk.Button(multi_submit_frame, text="提交多选题答案",
-                                   command=self.submit_multi_choice,
-                                   font=("微软雅黑", 12), bg="#4CAF50", fg="white")
-            submit_btn.pack(pady=5)
-
-        if self.current_question.get("题型") in ["解答题", "简答题"]:
-            answer_frame = tk.LabelFrame(main_frame, text="您的解答",
-                                         font=("微软雅黑", 12, "bold"), bg="#f0f0f0")
-            answer_frame.pack(fill=tk.BOTH, expand=True, pady=10)
-
-            self.answer_text = scrolledtext.ScrolledText(answer_frame, font=("微软雅黑", 12),
-                                                         wrap=tk.WORD, height=8)
-            self.answer_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
-
-            # 添加手动评分按钮
-            self.manual_check_frame = tk.Frame(main_frame, bg="#f0f0f0")
-            self.manual_check_frame.pack(pady=10)
-
-            tk.Button(self.manual_check_frame, text="提交并标记正确",
-                      command=lambda: self.manual_check_answer(True),
-                      font=("微软雅黑", 12), bg="#4CAF50", fg="white").pack(side=tk.LEFT, padx=5)
-
-            tk.Button(self.manual_check_frame, text="提交并标记错误",
-                      command=lambda: self.manual_check_answer(False), font=("微软雅黑", 12), bg="#F44336", fg="white").pack(side=tk.LEFT, padx=5)
-        else:
-            # 答案输入（非选择题）
-            if not options:
-                answer_frame = tk.Frame(main_frame, bg="#f0f0f0")
-                answer_frame.pack(fill=tk.X, pady=10)
-
-                tk.Label(answer_frame, text="答案:", font=("微软雅黑", 12), bg="#f0f0f0").pack(side=tk.LEFT)
-
-                self.answer_entry = tk.Entry(answer_frame, font=("微软雅黑", 12), width=30)
-                self.answer_entry.pack(side=tk.LEFT, padx=10)
-                self.answer_entry.bind("<Return>", lambda event: self.check_answer_wrapper(self.answer_entry.get()))
-
-                submit_btn = tk.Button(answer_frame, text="提交",
-                                       command=lambda: self.check_answer_wrapper(self.answer_entry.get()),
+                submit_btn = tk.Button(multi_submit_frame, text="提交多选题答案",
+                                       command=self.submit_multi_choice,
                                        font=("微软雅黑", 12), bg="#4CAF50", fg="white")
-                submit_btn.pack(side=tk.LEFT)
+                submit_btn.pack(pady=5)
+
+            if self.current_question.get("题型") in ["解答题", "简答题"]:
+                answer_frame = tk.LabelFrame(main_frame, text="您的解答",
+                                             font=("微软雅黑", 12, "bold"), bg="#f0f0f0")
+                answer_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+
+                self.answer_text = scrolledtext.ScrolledText(answer_frame, font=("微软雅黑", 12),
+                                                             wrap=tk.WORD, height=8)
+                self.answer_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+
+                # 添加手动评分按钮
+                self.manual_check_frame = tk.Frame(main_frame, bg="#f0f0f0")
+                self.manual_check_frame.pack(pady=10)
+
+                tk.Button(self.manual_check_frame, text="提交并标记正确",
+                          command=lambda: self.manual_check_answer(True),
+                          font=("微软雅黑", 12), bg="#4CAF50", fg="white").pack(side=tk.LEFT, padx=5)
+
+                tk.Button(self.manual_check_frame, text="提交并标记错误",
+                          command=lambda: self.manual_check_answer(False), font=("微软雅黑", 12), bg="#F44336", fg="white").pack(side=tk.LEFT, padx=5)
+            else:
+                # 答案输入（非选择题）
+                if not options:
+                    answer_frame = tk.Frame(main_frame, bg="#f0f0f0")
+                    answer_frame.pack(fill=tk.X, pady=10)
+
+                    tk.Label(answer_frame, text="答案:", font=("微软雅黑", 12), bg="#f0f0f0").pack(side=tk.LEFT)
+
+                    self.answer_entry = tk.Entry(answer_frame, font=("微软雅黑", 12), width=30)
+                    self.answer_entry.pack(side=tk.LEFT, padx=10)
+                    self.answer_entry.bind("<Return>", lambda event: self.check_answer_wrapper(self.answer_entry.get()))
+
+                    submit_btn = tk.Button(answer_frame, text="提交",
+                                           command=lambda: self.check_answer_wrapper(self.answer_entry.get()),
+                                           font=("微软雅黑", 12), bg="#4CAF50", fg="white")
+                    submit_btn.pack(side=tk.LEFT)
 
         # 导航按钮
         nav_frame = tk.Frame(main_frame, bg="#f0f0f0")
@@ -617,29 +783,30 @@ class ExamApp:
                              font=("微软雅黑", 12), bg="#F44336", fg="white")
         exit_btn.pack(side=tk.RIGHT, padx=10)
 
-        # 新功能：查看答案按钮
-        view_answer_btn = tk.Button(nav_frame, text="查看答案", command=self.show_answer,
-                                    font=("微软雅黑", 12), bg="#9C27B0", fg="white")
-        view_answer_btn.pack(side=tk.LEFT, padx=10)
+        # 非背题模式显示查看答案按钮
+        if not self.review_mode:
+            view_answer_btn = tk.Button(nav_frame, text="查看答案", command=self.show_answer,
+                                        font=("微软雅黑", 12), bg="#9C27B0", fg="white")
+            view_answer_btn.pack(side=tk.LEFT, padx=10)
 
-        # 新功能：速度控制按钮
-        speed_frame = tk.Frame(nav_frame, bg="#f0f0f0")
-        speed_frame.pack(side=tk.RIGHT, padx=10)
+            # 速度控制按钮
+            speed_frame = tk.Frame(nav_frame, bg="#f0f0f0")
+            speed_frame.pack(side=tk.RIGHT, padx=10)
 
-        # 加速按钮
-        speed_up_btn = tk.Button(speed_frame, text="加速", command=self.speed_up,
-                                 font=("微软雅黑", 10), bg="#FF5722", fg="white")
-        speed_up_btn.pack(side=tk.LEFT, padx=(0, 5))
+            # 加速按钮
+            speed_up_btn = tk.Button(speed_frame, text="加速", command=self.speed_up,
+                                     font=("微软雅黑", 10), bg="#FF5722", fg="white")
+            speed_up_btn.pack(side=tk.LEFT, padx=(0, 5))
 
-        # 等待时间显示
-        self.wait_time_label = tk.Label(speed_frame, text=f"等待: {self.default_wait_seconds}秒",
-                                        font=("微软雅黑", 10), bg="#f0f0f0")
-        self.wait_time_label.pack(side=tk.LEFT, padx=5)
+            # 等待时间显示
+            self.wait_time_label = tk.Label(speed_frame, text=f"等待: {self.default_wait_seconds}秒",
+                                            font=("微软雅黑", 10), bg="#f0f0f0")
+            self.wait_time_label.pack(side=tk.LEFT, padx=5)
 
-        # 减速按钮
-        speed_down_btn = tk.Button(speed_frame, text="减速", command=self.speed_down,
-                                   font=("微软雅黑", 10), bg="#3F51B5", fg="white")
-        speed_down_btn.pack(side=tk.LEFT, padx=(5, 0))
+            # 减速按钮
+            speed_down_btn = tk.Button(speed_frame, text="减速", command=self.speed_down,
+                                       font=("微软雅黑", 10), bg="#3F51B5", fg="white")
+            speed_down_btn.pack(side=tk.LEFT, padx=(5, 0))
 
         result_frame = tk.Frame(main_frame, bg="#f0f0f0")
         result_frame.pack(fill=tk.X, pady=10)
@@ -652,6 +819,18 @@ class ExamApp:
         self.countdown_label = tk.Label(result_frame, text="", font=("微软雅黑", 12), fg="#666", bg="#f0f0f0")
         self.countdown_label.pack(side=tk.RIGHT)
 
+    def toggle_review_mode(self):
+        """切换背题模式"""
+        self.review_mode = not self.review_mode
+        self.show_question()
+
+    def apply_type_filter(self, filter_type):
+        """应用题型筛选"""
+        self.selected_filter = filter_type
+        self.current_index = 0
+        self.generate_question_order()
+        self.show_question()
+
     def submit_multi_choice(self):
         """提交多选题答案"""
         selected_letters = []
@@ -662,16 +841,6 @@ class ExamApp:
         if not selected_letters:
             messagebox.showwarning("提示", "请至少选择一个选项")
             return
-
-        # 可选：禁用提交按钮防止重复提交
-        submit_btn = self.multi_select_frame.winfo_children()[-1]  # 获取提交按钮
-        submit_btn.config(state=tk.DISABLED)
-        '''if False:
-            # 可选：显示"正在评估..."提示
-            self.result_label.config(text="正在评估...", fg="blue")
-
-            # 可选：0.5秒后恢复按钮状态
-            self.root.after(500, lambda: submit_btn.config(state=tk.NORMAL))'''
 
         # 将选择的选项按字母排序并用" | "连接
         selected_letters.sort()
@@ -950,6 +1119,7 @@ class ExamApp:
         """清除当前框架内容"""
         for widget in self.root.winfo_children():
             widget.destroy()
+
 
 if __name__ == "__main__":
     root = tk.Tk()

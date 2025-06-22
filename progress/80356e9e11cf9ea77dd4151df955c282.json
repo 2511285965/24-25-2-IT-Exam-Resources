@@ -1,0 +1,244 @@
+{
+  "total_questions": 46,
+  "answered": {
+    "0": {
+      "user_answer": "C",
+      "is_correct": true,
+      "timestamp": 1750608366.5974863
+    },
+    "15": {
+      "user_answer": "B",
+      "is_correct": true,
+      "timestamp": 1750608375.7172256
+    },
+    "26": {
+      "user_answer": "D",
+      "is_correct": true,
+      "timestamp": 1750608382.7663436
+    },
+    "23": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1750608389.4846456
+    },
+    "21": {
+      "user_answer": "核心传输",
+      "is_correct": true,
+      "timestamp": 1750608405.2288527
+    },
+    "2": {
+      "user_answer": "C",
+      "is_correct": true,
+      "timestamp": 1750608409.9947128
+    },
+    "43": {
+      "user_answer": "现场",
+      "is_correct": true,
+      "timestamp": 1750608419.7249072
+    },
+    "45": {
+      "user_answer": "汇聚",
+      "is_correct": true,
+      "timestamp": 1750608424.1381853
+    },
+    "25": {
+      "user_answer": "D",
+      "is_correct": true,
+      "timestamp": 1750608435.3620403
+    },
+    "11": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1750608439.5587897
+    },
+    "10": {
+      "user_answer": "敏感元件",
+      "is_correct": true,
+      "timestamp": 1750608454.6932907
+    },
+    "6": {
+      "user_answer": "C",
+      "is_correct": true,
+      "timestamp": 1750608464.1468997
+    },
+    "32": {
+      "user_answer": "D",
+      "is_correct": true,
+      "timestamp": 1750608472.2977684
+    },
+    "42": {
+      "user_answer": "C",
+      "is_correct": true,
+      "timestamp": 1750608475.2003367
+    },
+    "19": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1750608476.7562068
+    },
+    "31": {
+      "user_answer": "C",
+      "is_correct": true,
+      "timestamp": 1750608566.3905587
+    },
+    "40": {
+      "user_answer": "B",
+      "is_correct": true,
+      "timestamp": 1750608576.0616658
+    },
+    "8": {
+      "user_answer": "C",
+      "is_correct": true,
+      "timestamp": 1750608680.6995492
+    },
+    "7": {
+      "user_answer": "E",
+      "is_correct": true,
+      "timestamp": 1750608690.1245718
+    },
+    "13": {
+      "user_answer": "D",
+      "is_correct": true,
+      "timestamp": 1750608697.1494865
+    },
+    "35": {
+      "user_answer": "M-Bus",
+      "is_correct": false,
+      "timestamp": 1750608716.4601138
+    },
+    "24": {
+      "user_answer": "B",
+      "is_correct": true,
+      "timestamp": 1750608732.7208939
+    },
+    "1": {
+      "user_answer": "C",
+      "is_correct": true,
+      "timestamp": 1750608740.0370817
+    },
+    "9": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1750608747.149618
+    },
+    "17": {
+      "user_answer": "C",
+      "is_correct": true,
+      "timestamp": 1750608812.093935
+    },
+    "44": {
+      "user_answer": "网状",
+      "is_correct": false,
+      "timestamp": 1750608829.3339531
+    },
+    "12": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1750608847.4747105
+    },
+    "27": {
+      "user_answer": "D",
+      "is_correct": true,
+      "timestamp": 1750608853.429742
+    },
+    "18": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1750608857.1847072
+    },
+    "4": {
+      "user_answer": "C",
+      "is_correct": false,
+      "timestamp": 1750608909.6031759
+    },
+    "20": {
+      "user_answer": "32",
+      "is_correct": false,
+      "timestamp": 1750608916.3994389
+    },
+    "34": {
+      "user_answer": "B",
+      "is_correct": true,
+      "timestamp": 1750608928.808441
+    },
+    "16": {
+      "user_answer": "D",
+      "is_correct": true,
+      "timestamp": 1750608933.6994498
+    },
+    "39": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1750608939.7728946
+    },
+    "38": {
+      "user_answer": "汇聚",
+      "is_correct": true,
+      "timestamp": 1750608945.080194
+    },
+    "29": {
+      "user_answer": "B",
+      "is_correct": true,
+      "timestamp": 1750608947.8347003
+    },
+    "22": {
+      "user_answer": "D",
+      "is_correct": true,
+      "timestamp": 1750608950.750766
+    },
+    "41": {
+      "user_answer": "D",
+      "is_correct": true,
+      "timestamp": 1750608955.6609983
+    },
+    "5": {
+      "user_answer": "C",
+      "is_correct": true,
+      "timestamp": 1750608958.1107752
+    },
+    "37": {
+      "user_answer": "网状;网状结构",
+      "is_correct": true,
+      "timestamp": 1750608968.677997
+    },
+    "3": {
+      "user_answer": "B",
+      "is_correct": true,
+      "timestamp": 1750608976.871698
+    },
+    "36": {
+      "user_answer": "无线通信",
+      "is_correct": true,
+      "timestamp": 1750608984.2160685
+    },
+    "28": {
+      "user_answer": "B",
+      "is_correct": true,
+      "timestamp": 1750608987.3490734
+    },
+    "33": {
+      "user_answer": "A",
+      "is_correct": true,
+      "timestamp": 1750608997.3421206
+    },
+    "30": {
+      "user_answer": "C",
+      "is_correct": true,
+      "timestamp": 1750609004.7911627
+    },
+    "14": {
+      "user_answer": "D",
+      "is_correct": true,
+      "timestamp": 1750609008.6796396
+    }
+  },
+  "wrong_questions": [
+    35,
+    44,
+    4,
+    20
+  ],
+  "current_index": 0,
+  "correct_count": 44,
+  "wrong_count": 17
+}

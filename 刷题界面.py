@@ -587,7 +587,7 @@ class ExamApp:
         # 背题模式下直接显示答案
         if self.review_mode:
 
-            if self.current_question.get("题型") in ["选择题", "判断题", "多选题"] and self.current_question.get(
+            if self.current_question.get("题型") in ["单选题", "选择题", "判断题", "多选题"] and self.current_question.get(
                     "options"):
                 options_frame = tk.LabelFrame(main_frame, text="选项与答案",
                                               font=("微软雅黑", 12, "bold"),

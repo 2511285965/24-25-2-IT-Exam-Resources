@@ -125,11 +125,14 @@ def parse_question_file(file_path):
             elif isinstance(options_value, str):
                 raw_options = [options_value.strip()]
 
-            # 清理每个选项格式
-            for opt in raw_options:
-                # 清理选项格式：移除开头的字母和标点
-                clean_opt = re.sub(r"^[A-Za-z][\.\s]*", "", opt).strip()
-                options.append(clean_opt)
+            if raw_options[0].lower().startswith("a") and raw_options[1].lower().startswith("b"):
+                # 清理每个选项格式
+                for opt in raw_options:
+                    # 清理选项格式：移除开头的字母和标点
+                    clean_opt = re.sub(r"^[A-Za-z][\.\s]*", "", opt).strip()
+                    options.append(clean_opt)
+            else:
+                options = raw_options[:]
 
         if image_col and image_col in question:
             image_path = question[image_col]
@@ -729,6 +732,7 @@ class ExamApp:
         if not self.review_mode:
             # 选项（选择题）
             options = self.current_question.get("options", [])
+            # print(options)
             if options and self.current_question.get("题型") != "多选题":
                 # 非多选题使用按钮
                 options_frame = tk.LabelFrame(main_frame, text="选项", font=("微软雅黑", 12, "bold"),
@@ -740,7 +744,7 @@ class ExamApp:
                     if i < len(letters):
                         btn = tk.Button(options_frame, text=f"{letters[i]}. {opt}",
                                         command=lambda l=letters[i]: self.check_answer_wrapper(l),
-                                        font=("微软雅黑", 11), bg="#E0E0E0", width=40, anchor="w")
+                                        font=("微软雅黑", 11), bg="#E0E0E0", width=60, anchor="w")
                         btn.pack(pady=5, padx=10, anchor="w")
 
             elif options and self.current_question.get("题型") == "多选题":

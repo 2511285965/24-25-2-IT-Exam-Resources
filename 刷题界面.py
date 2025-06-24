@@ -661,7 +661,11 @@ class ExamApp:
                 # print()
                 # print(" ")
                 # print(correct_answer)
-                answer_text.insert(tk.INSERT, self.current_question.get("答案", "???"))
+                answer = self.current_question.get("答案", "???")
+                answer = answer.strip().replace('(', '\n(').replace(')\n', ')').replace('\n()', '() ')
+                answer_text.insert(tk.INSERT, answer)
+                print(answer)
+                # print(self.current_question.get("答案", "???"))
                 answer_text.config(state=tk.DISABLED)
                 answer_text.pack(fill=tk.BOTH, expand=True)
 
